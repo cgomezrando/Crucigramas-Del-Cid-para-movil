@@ -132,6 +132,7 @@ class FFAppState extends ChangeNotifier {
     selectedIndices.insert(index, value);
   }
 
+  /// False
   bool _hasSavedGame = false;
   bool get hasSavedGame => _hasSavedGame;
   set hasSavedGame(bool value) {

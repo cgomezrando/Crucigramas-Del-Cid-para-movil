@@ -141,14 +141,14 @@ class _CrosswordBoardState extends State<CrosswordBoard> {
                             left: 2,
                             child: Text('$num',
                                 style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: 10,
                                     color: granate,
                                     fontWeight: FontWeight.bold)),
                           ),
                         Center(
                           child: Text(letter,
                               style: TextStyle(
-                                  fontSize: 22,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: granate)),
                         ),
@@ -179,9 +179,13 @@ class _CrosswordBoardState extends State<CrosswordBoard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title,
-            style: TextStyle(
-                fontSize: 14, fontWeight: FontWeight.bold, color: granate)),
+        SizedBox(
+          width: double.infinity,
+          child: Text(title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 14, fontWeight: FontWeight.bold, color: granate)),
+        ),
         const SizedBox(height: 6),
         Expanded(
           child: ListView.builder(

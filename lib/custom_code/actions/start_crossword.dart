@@ -60,6 +60,7 @@ Future startCrossword(BuildContext context) async {
   }
 
   FFAppState().isLoadingCrossword = true;
+  FFAppState().hasSavedGame = true;
 }
 
 class _RotatingHourglass extends StatefulWidget {
