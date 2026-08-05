@@ -7,11 +7,24 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
+// Custom Action: checkSavedGame
+// Hay partida guardada si el usuario ha escrito alguna letra (userAnswers no vacio).
+// Config: Include BuildContext OFF, Return Value OFF.
+
 Future checkSavedGame() async {
   try {
-    final data = FFAppState().currentCrosswordData;
-    final hasGrid = data.grid.isNotEmpty;
-    FFAppState().hasSavedGame = hasGrid;
+    final raw = FFAppState().userAnswers;
+    bool hasProgress = false;
+    if (raw is Map && raw.isNotEmpty) {
+      // hay progreso si alguna casilla tiene letra
+      for (final v in raw.values) {
+        if (v != null && v.toString().isNotEmpty) {
+          hasProgress = true;
+          break;
+        }
+      }
+    }
+    FFAppState().hasSavedGame = hasProgress;
   } catch (e) {
     FFAppState().hasSavedGame = false;
   }

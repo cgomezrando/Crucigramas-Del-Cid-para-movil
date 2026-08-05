@@ -32,18 +32,25 @@ class CrosswordBoard extends StatefulWidget {
 
 class _CrosswordBoardState extends State<CrosswordBoard> {
   Map<String, String> answers = {};
+  String _loadedId = '';
 
-  @override
-  void initState() {
-    super.initState();
-    final raw = FFAppState().userAnswers;
-    if (raw is Map) {
-      raw.forEach((k, v) => answers[k.toString()] = v.toString());
+  void _syncFromState() {
+    // Recarga las respuestas del estado cuando cambia el crucigrama
+    final data = FFAppState().currentCrosswordData;
+    final id = data.id ?? '';
+    if (id != _loadedId) {
+      _loadedId = id;
+      answers = {};
+      final raw = FFAppState().userAnswers;
+      if (raw is Map) {
+        raw.forEach((k, v) => answers[k.toString()] = v.toString());
+      }
     }
   }
 
   void _save() {
     FFAppState().userAnswers = Map<String, dynamic>.from(answers);
+    FFAppState().hasSavedGame = true;
   }
 
   Color get granate => const Color(0xFF6B1F2C);
@@ -52,6 +59,7 @@ class _CrosswordBoardState extends State<CrosswordBoard> {
 
   @override
   Widget build(BuildContext context) {
+    _syncFromState();
     final data = FFAppState().currentCrosswordData;
     final int W = data.width;
     final int H = data.height;

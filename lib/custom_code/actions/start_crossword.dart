@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 import 'dart:math';
 
@@ -42,21 +41,90 @@ Future startCrossword(BuildContext context) async {
     },
   );
 
+  FFAppState().userAnswers = <String, dynamic>{};
+
   try {
-    final jsonStr = await rootBundle.loadString('assets/crosswords_pool.json');
-    final List pool = jsonDecode(jsonStr) as List;
     final rnd = Random();
-    final data = pool[rnd.nextInt(pool.length)] as Map<String, dynamic>;
-    FFAppState().currentCrosswordData = CrosswordDataStruct.fromMap(data);
-    FFAppState().userAnswers = {};
-  } catch (e) {}
+    final chunkIndex = rnd.nextInt(3);
+    String jsonStr;
+    if (chunkIndex == 0) {
+      jsonStr = await crosswordData1();
+    } else if (chunkIndex == 1) {
+      jsonStr = await crosswordData2();
+    } else {
+      jsonStr = await crosswordData3();
+    }
+
+    final List pool = jsonDecode(jsonStr) as List;
+    final c = (pool[rnd.nextInt(pool.length)] as Map).cast<String, dynamic>();
+
+    final int w = (c['w'] as num).toInt();
+    final int h = (c['h'] as num).toInt();
+    final String g = c['g'] as String;
+
+    final Map<int, int> numMap = {};
+    for (final pair in (c['n'] as List)) {
+      final p = pair as List;
+      numMap[(p[0] as num).toInt()] = (p[1] as num).toInt();
+    }
+
+    // Construir grid directamente con GridCellStruct
+    final List<GridCellStruct> grid = [];
+    for (int i = 0; i < g.length; i++) {
+      final ch = g[i];
+      final row = i ~/ w;
+      final col = i % w;
+      if (ch == '#') {
+        grid.add(GridCellStruct(
+            row: row, col: col, type: 'block', answer: '', number: 0));
+      } else {
+        grid.add(GridCellStruct(
+            row: row,
+            col: col,
+            type: 'letter',
+            answer: ch,
+            number: numMap[i] ?? 0));
+      }
+    }
+
+    List<ClueStruct> mkClues(List raw, String dir) {
+      final out = <ClueStruct>[];
+      for (final item in raw) {
+        final it = item as List;
+        final indices = (it[2] as List).map((x) => (x as num).toInt()).toList();
+        out.add(ClueStruct(
+          number: (it[0] as num).toInt(),
+          clue: it[1] as String,
+          answer: '',
+          length: indices.length,
+          direction: dir,
+          cellIndices: indices,
+        ));
+      }
+      return out;
+    }
+
+    // Construir el CrosswordDataStruct directamente
+    FFAppState().currentCrosswordData = CrosswordDataStruct(
+      id: 'cw${DateTime.now().millisecondsSinceEpoch}',
+      title: 'Crucigrama',
+      width: w,
+      height: h,
+      grid: grid,
+      cluesHorizontal: mkClues(c['ch'] as List, 'horizontal'),
+      cluesVertical: mkClues(c['cv'] as List, 'vertical'),
+    );
+  } catch (e, st) {
+    print('ERROR startCrossword: $e');
+    print(st);
+  }
 
   if (context.mounted) {
     Navigator.of(context, rootNavigator: true).pop();
   }
 
   FFAppState().isLoadingCrossword = true;
-  FFAppState().hasSavedGame = true;
+  FFAppState().hasSavedGame = false;
 }
 
 class _RotatingHourglass extends StatefulWidget {
