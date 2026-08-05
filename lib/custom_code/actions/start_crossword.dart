@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
+import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'dart:math';
 
 Future startCrossword(BuildContext context) async {
   showDialog(
@@ -29,14 +30,11 @@ Future startCrossword(BuildContext context) async {
             children: const [
               _RotatingHourglass(),
               SizedBox(height: 20),
-              Text(
-                'Cargando crucigrama...',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF6B1F2C),
-                ),
-              ),
+              Text('Cargando crucigrama...',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF6B1F2C))),
             ],
           ),
         ),
@@ -45,14 +43,12 @@ Future startCrossword(BuildContext context) async {
   );
 
   try {
-    final response = await http.get(Uri.parse(
-        'https://crossword-generator-865875655013.europe-west1.run.app/generate-crossword'));
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      FFAppState().currentCrosswordData =
-          CrosswordDataStruct.fromMap(data as Map<String, dynamic>);
-      FFAppState().userAnswers = {};
-    }
+    final jsonStr = await rootBundle.loadString('assets/crosswords_pool.json');
+    final List pool = jsonDecode(jsonStr) as List;
+    final rnd = Random();
+    final data = pool[rnd.nextInt(pool.length)] as Map<String, dynamic>;
+    FFAppState().currentCrosswordData = CrosswordDataStruct.fromMap(data);
+    FFAppState().userAnswers = {};
   } catch (e) {}
 
   if (context.mounted) {
@@ -89,9 +85,8 @@ class _RotatingHourglassState extends State<_RotatingHourglass>
   @override
   Widget build(BuildContext context) {
     return RotationTransition(
-      turns: _c,
-      child: const Icon(Icons.hourglass_bottom,
-          size: 64, color: Color(0xFF6B1F2C)),
-    );
+        turns: _c,
+        child: const Icon(Icons.hourglass_bottom,
+            size: 64, color: Color(0xFF6B1F2C)));
   }
 }

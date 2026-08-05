@@ -71,7 +71,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   alignment: AlignmentDirectional(0.0, 0.0),
                   child: Padding(
                     padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 450.0, 0.0, 0.0),
+                        EdgeInsetsDirectional.fromSTEB(0.0, 500.0, 0.0, 0.0),
                     child: InkWell(
                       splashColor: Colors.transparent,
                       focusColor: Colors.transparent,
@@ -245,8 +245,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 40.0, 0.0, 10.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(
+                          40.0, 40.0, 40.0, 10.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
