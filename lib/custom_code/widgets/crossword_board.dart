@@ -149,7 +149,7 @@ class _CrosswordBoardState extends State<CrosswordBoard> {
                             left: 2,
                             child: Text('$num',
                                 style: TextStyle(
-                                    fontSize: 10,
+                                    fontSize: 9,
                                     color: granate,
                                     fontWeight: FontWeight.bold)),
                           ),

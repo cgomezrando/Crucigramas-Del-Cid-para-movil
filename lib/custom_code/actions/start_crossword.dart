@@ -45,14 +45,18 @@ Future startCrossword(BuildContext context) async {
 
   try {
     final rnd = Random();
-    final chunkIndex = rnd.nextInt(3);
+    final chunkIndex = rnd.nextInt(5);
     String jsonStr;
     if (chunkIndex == 0) {
       jsonStr = await crosswordData1();
     } else if (chunkIndex == 1) {
       jsonStr = await crosswordData2();
-    } else {
+    } else if (chunkIndex == 2) {
       jsonStr = await crosswordData3();
+    } else if (chunkIndex == 3) {
+      jsonStr = await crosswordData4();
+    } else {
+      jsonStr = await crosswordData5();
     }
 
     final List pool = jsonDecode(jsonStr) as List;

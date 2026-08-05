@@ -5,3 +5,5 @@ export '/custom_code/actions/check_saved_game.dart' show checkSavedGame;
 export '/custom_code/actions/crossword_data1.dart' show crosswordData1;
 export '/custom_code/actions/crossword_data2.dart' show crosswordData2;
 export '/custom_code/actions/crossword_data3.dart' show crosswordData3;
+export '/custom_code/actions/crossword_data4.dart' show crosswordData4;
+export '/custom_code/actions/crossword_data5.dart' show crosswordData5;

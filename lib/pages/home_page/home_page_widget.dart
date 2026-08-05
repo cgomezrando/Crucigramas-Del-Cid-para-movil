@@ -246,10 +246,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   children: [
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(
-                          40.0, 40.0, 40.0, 10.0),
+                          40.0, 60.0, 40.0, 10.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
                             'CRUCIGRAMA',
